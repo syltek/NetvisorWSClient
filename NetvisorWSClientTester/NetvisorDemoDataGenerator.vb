@@ -26,9 +26,9 @@ Module NetvisorDemoDataGenerator
 
     Sub Main()
 
-        Dim partnerSettings As New PartnerSettings("Netvisor DemoDataGenerator", "XXXX", "XXXX")
-        Dim customerSettings As New CustomerSettings("XXXX", "XXXX", CustomerSettings.InterfaceLanguage_Finnish)
-        Dim targetOrganisationIdentifier As New FinnishOrganisationIdentifier("XXXX")
+        Dim partnerSettings As New PartnerSettings("Syltek", "Syl_20627", "CD7719B60DEC74C4B2F02AC7A571E49C")
+        Dim customerSettings As New CustomerSettings("SD_91541_28548", "1C237EED7B3643E37F2D92FD4A4410DF", CustomerSettings.InterfaceLanguage_English)
+        Dim targetOrganisationIdentifier As New FinnishOrganisationIdentifier("0300880-9")
         Dim netvisorClient As WSClient
         Dim response As NetvisorApplicationResponse
 

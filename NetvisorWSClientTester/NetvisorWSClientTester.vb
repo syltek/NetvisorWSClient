@@ -34,10 +34,10 @@ Module NetvisorWSClientTester
 
     Sub Main()
 
-        m_partnerSettings = New PartnerSettings("Netvisor ExampleClient", "XXXX", "XXXX")
-        m_customerSettings = New CustomerSettings("XXXX", "XXXX", CustomerSettings.InterfaceLanguage_Finnish)
+        m_partnerSettings = New PartnerSettings("Syltek", "Syl_20627", "CD7719B60DEC74C4B2F02AC7A571E49C")
+        m_customerSettings = New CustomerSettings("SD_91541_28548", "1C237EED7B3643E37F2D92FD4A4410DF", CustomerSettings.InterfaceLanguage_English)
 
-        m_targetOrganisationIdentifier = New FinnishOrganisationIdentifier("XXXX")
+        m_targetOrganisationIdentifier = New FinnishOrganisationIdentifier("0300880-9")
 
         m_netvisorClient = New WSClient(m_customerSettings, m_partnerSettings)
         m_netvisorClient.TargetEnvironment = WSClient.Environment.DEMO
@@ -66,9 +66,9 @@ Module NetvisorWSClientTester
         'purchaseInvoiceAddExample()
         'salesPaymentAddExample()
         'voucherAddExample()
-        'customerAddExample()
-        customerListExample()
-        'salesInvoiceAddExample() aktiivinen 
+        customerAddExample()
+        'customerListExample()
+        'salesInvoiceAddExample() 'aktiivinen 
         'eScanDocumentSendExample()
         'purchaseInvoiceListExample()
         'salesInvoiceListExample()
@@ -449,7 +449,7 @@ Module NetvisorWSClientTester
     Private Sub customerLoadExample()
 
         Dim parameters As New NameValueCollection
-        parameters.Add(NetvisorApplicationCustomerResponse.PARAMETER_ID, "12")
+        parameters.Add(NetvisorApplicationCustomerResponse.PARAMETER_ID, "1011")
 
         Dim customerResponse As NetvisorApplicationCustomerResponse
         customerResponse = CType(m_netvisorClient.SendRequest(WSClient.NetvisorWebServiceIntegrationActions.GETCUSTOMER,
@@ -470,7 +470,7 @@ Module NetvisorWSClientTester
     Private Sub salesInvoiceRawDataLoadExample()
 
         Dim parameters As New NameValueCollection
-        parameters.Add("netvisorkey", 7155)
+        parameters.Add("netvisorkey", 1257)
 
         Dim invoiceResponse As NetvisorApplicationSalesInvoiceResponse
         invoiceResponse = CType(m_netvisorClient.SendRequest(WSClient.NetvisorWebServiceIntegrationActions.GETSALESINVOICE,
@@ -747,10 +747,15 @@ Module NetvisorWSClientTester
         Dim parameters As New NameValueCollection
         parameters.Add(NetvisorApplicationCustomerRequest.PARAMETER_METHOD, NetvisorApplicationCustomerRequest.PARAMETER_METHOD_ADD)
 
-        customer.Name = "Anni Asiakas"
-        customer.OrganisationIdentifier = "1234567-8"
-        customer.customerGroupName = "Alennusasiakkaat"
-        customer.invoicePrintChannelFormat = 10
+        customer.Name = "Anni Asiakas 3"
+        'customer.OrganisationIdentifier = "1234567-8"
+        'customer.customerGroupName = "Alennusasiakkaat"
+        'customer.invoicePrintChannelFormat = 10
+        customer.StreetAddress = "ax"
+        customer.CountryISO3166Code = "ES"
+
+        customer.AdditionalAddressLine = "ax"
+
         customer.IsPrivateCustomer = True
 
         Dim response As NetvisorApplicationResponse
@@ -769,8 +774,11 @@ Module NetvisorWSClientTester
     Private Sub customerListExample()
 
         Dim customerListResponse As NetvisorApplicationCustomerListResponse
+        Dim query = New NameValueCollection
+        query.Add("keyword", "lastname othername")
+
         customerListResponse = CType(m_netvisorClient.SendRequest(WSClient.NetvisorWebServiceIntegrationActions.CUSTOMER_LIST,
-                                    "", m_targetOrganisationIdentifier), NetvisorApplicationCustomerListResponse)
+                                    "", m_targetOrganisationIdentifier, query), NetvisorApplicationCustomerListResponse)
 
         If customerListResponse.IsresponseOK Then
             Dim customers As ArrayList = customerListResponse.getCustomerList()
@@ -788,30 +796,30 @@ Module NetvisorWSClientTester
         Dim invoice As New NetvisorInvoice
 
         With invoice
-            .CustomerIdentifier = "TEMP"
-            .CustomerName = "Matti Mallikas"
-            .CustomerNameExtension = "Netvisor Oy"
-            .CustomerAddress = "Pajukuja 15"
-            .CustomerPostNumber = "53900"
-            .CustomerTown = "Lappeenranta"
+            '.CustomerIdentifier = "TEMP2"
+            '.CustomerName = "Matti Mallikas"
+            '.CustomerNameExtension = "Netvisor Oy"
+            '.CustomerAddress = "Pajukuja 15"
+            '.CustomerPostNumber = "53900"
+            '.CustomerTown = "Lappeenranta"
             .invoiceType = NetvisorInvoice.NetvisorInvoiceTypes.invoice
             .InvoiceStatus = NetvisorInvoice.NetvisorInvoiceStatuses.UnSent
 
             .CustomerIdentifierType = NetvisorInvoice.CustomerIdentifierSource.NETVISOR_IDENTIFIER
-            .CustomerIdentifier = 10
+            .CustomerIdentifier = 1010
 
             .DeliveryDate = Now.Date.AddDays(2)
             .InvoiceDate = Now.Date
-            .InvoiceSum = 100
-            .iso4217currencycode = "EUR"
-            .overrideCurrencyRate = 1.5
+            '.InvoiceSum = 100
+            '.iso4217currencycode = "EUR"
+            '.overrideCurrencyRate = 1.5
             .ourReference = "Meidän viite"
             .yourReference = "Teidän viite"
             .privateComment = "Laskun kommentti vain omaa käyttöä varten"
             .PaymentTermNetDays = 14
             .ReferenceNumber = New ReferenceNumber("1070", True)
-            .SalesInvoiceFreeTextAfterLines = "vapaata tekstiä ennen rivejä"
-            .SalesInvoiceFreeTextBeforeLines = "vapaata tekstiä rivien jälkeen"
+            '.SalesInvoiceFreeTextAfterLines = "vapaata tekstiä ennen rivejä"
+            '.SalesInvoiceFreeTextBeforeLines = "vapaata tekstiä rivien jälkeen"
             .sellerName = "Matti Mallikas"
             .sellerIdentifier = 6 'Myyjälinkitystieto pitää tietää. Ei ole mahdollista saada tietoon muualta, kuin käyttöliittymästä osoiteriviltä. Ei ole mahdollisuutta hakea rajapinnan kautta.
             .DeliveryMethod = "Asennettuna"
@@ -837,36 +845,36 @@ Module NetvisorWSClientTester
             .ProductName = "Testituote"
             .ProductUnitPrice = 100
             .productUnitPriceIsGross = False
-            .ProductVatPercentage = 0
+            .ProductVatPercentage = 10
             .productVatCode = VatCode.vatCodes.DOMESTIC_SALES
             .AccountingSuggestionAccountNumber = 3000
 
-            .addDimension(New NetvisorDimension("IIHF", "Project"))
-            .addDimension(New NetvisorDimension("Uusi otsikko", "Uusi kohde"))
+            '.addDimension(New NetvisorDimension("IIHF", "Project"))
+            '.addDimension(New NetvisorDimension("Uusi otsikko", "Uusi kohde"))
         End With
 
         invoice.addInvoiceLine(productLine)
 
-        invoice.OverrideDefaultSalesAccrualAccountNumber = 2965
-        invoice.addInvoiceAccrualEntry(New NetvisorInvoiceAccrualEntry(1, 2012, 50))
-        invoice.addInvoiceAccrualEntry(New NetvisorInvoiceAccrualEntry(2, 2012, 50))
+        'invoice.OverrideDefaultSalesAccrualAccountNumber = 2965
+        'invoice.addInvoiceAccrualEntry(New NetvisorInvoiceAccrualEntry(1, 2012, 50))
+        'invoice.addInvoiceAccrualEntry(New NetvisorInvoiceAccrualEntry(2, 2012, 50))
 
-        commentLine = New NetvisorInvoiceCommentLine
-        commentLine.comment = "Testikommentti tuotteen jälkeen"
-        invoice.addInvoiceLine(commentLine)
+        'commentLine = New NetvisorInvoiceCommentLine
+        'commentLine.comment = "Testikommentti tuotteen jälkeen"
+        'invoice.addInvoiceLine(commentLine)
 
-        Dim attachment As New NetvisorAttachment()
-        With attachment
-            .description = "Testiliite"
-            .fileName = "testiliite.pdf"
-            .mimeType = "application/pdf"
-            .printByDefaultOnSalesInvoice = False
+        'Dim attachment As New NetvisorAttachment()
+        'With attachment
+        '    .description = "Testiliite"
+        '    .fileName = "testiliite.pdf"
+        '    .mimeType = "application/pdf"
+        '    .printByDefaultOnSalesInvoice = False
 
-            .attachmentData = Convert.FromBase64String("/9j/4AAQSkZJRgABAQEAYABgAAD//gAcU29mdHdhcmU6IE1pY3Jvc29mdCBPZmZpY2X/2wBDAAoH" &
-                                                      "BwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8")
-        End With
+        '    .attachmentData = Convert.FromBase64String("/9j/4AAQSkZJRgABAQEAYABgAAD//gAcU29mdHdhcmU6IE1pY3Jvc29mdCBPZmZpY2X/2wBDAAoH" &
+        '                                              "BwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8")
+        'End With
 
-        invoice.addAttachment(attachment)
+        'invoice.addAttachment(attachment)
 
         Dim response As NetvisorApplicationResponse
         Dim request As New NetvisorApplicationInvoiceRequest
@@ -1039,9 +1047,13 @@ Module NetvisorWSClientTester
 
     Private Sub salesInvoiceListExample()
 
+        Dim parameters As New NameValueCollection
+        parameters.Add("InvoicesAboveNetvisorKey", 1025)
+
         Dim invoiceListResponse As NetvisorApplicationSalesInvoiceListResponse
         invoiceListResponse = CType(m_netvisorClient.SendRequest(WSClient.NetvisorWebServiceIntegrationActions.SALESINVOICE_LIST,
-                                    "", m_targetOrganisationIdentifier), NetvisorApplicationSalesInvoiceListResponse)
+                                    "", m_targetOrganisationIdentifier, parameters), NetvisorApplicationSalesInvoiceListResponse)
+
 
         If invoiceListResponse.IsresponseOK Then
             Dim invoices As ArrayList = invoiceListResponse.getSalesInvoiceList()

@@ -13,17 +13,21 @@ Imports System.Security.Cryptography
 Imports System.Xml
 
 Imports NetvisorWSClient.util
+Imports System.Net.Http
+Imports System.Text
 
 Namespace NetvisorWSClient.communication
     <ComClass(WSClient.ClassId, WSClient.InterfaceId, WSClient.EventsId)> Public Class WSClient
+
+        Private Shared ReadOnly HttpClient As New HttpClient
 
         Public Const ClassId As String = "98349785-8BE2-4604-848D-F5B103D6171D"
         Public Const InterfaceId As String = "36613EE9-125F-493d-9968-771E18C2226F"
         Public Const EventsId As String = "A036F02F-F87E-4548-A536-7DD7EA8E62B2"
 
-        Public Const BASE_URL_PRODUCTION As String = "Anna Netvisorin tuotanto ympäristön URI"
-        Public Const BASE_URL_DEMO As String = "Anna Netvisorin koulutus ympäristön URI"
-        Public Const BASE_URL_ISV As String = "Anna Netvisorin ISV eli testaus ympäristön URI"
+        Public Const BASE_URL_PRODUCTION As String = "https://isvapi.netvisor.fi/"
+        Public Const BASE_URL_DEMO As String = "https://isvapi.netvisor.fi/"
+        Public Const BASE_URL_ISV As String = "https://isvapi.netvisor.fi/"
 
         Public Const ACTION_CUSTOMER As String = "customer.nv"
         Public Const ACTION_SALESINVOICE As String = "salesinvoice.nv"
@@ -220,18 +224,18 @@ Namespace NetvisorWSClient.communication
             Return headers
         End Function
 
-        Public Function SendRequest(ByVal fullActionUrl As String, _
-                                     Optional ByVal postData As String = vbNullString, _
+        Public Function SendRequest(ByVal fullActionUrl As String,
+                                     Optional ByVal postData As String = vbNullString,
                                      Optional ByVal targetOrganisation As FinnishOrganisationIdentifier = Nothing) As Object
 
             Return sendRequest_real(fullActionUrl, postData, targetOrganisation)
         End Function
 
-        Public Function SendRequest(ByVal action As NetvisorWebServiceIntegrationActions, _
-                                     Optional ByVal postData As String = vbNullString, _
-                                     Optional ByVal targetOrganisation As FinnishOrganisationIdentifier = Nothing, _
-                                     Optional ByVal queryStringParameters As NameValueCollection = Nothing, _
-                                     Optional ByVal overrideTransactionID As Boolean = False, _
+        Public Function SendRequest(ByVal action As NetvisorWebServiceIntegrationActions,
+                                     Optional ByVal postData As String = vbNullString,
+                                     Optional ByVal targetOrganisation As FinnishOrganisationIdentifier = Nothing,
+                                     Optional ByVal queryStringParameters As NameValueCollection = Nothing,
+                                     Optional ByVal overrideTransactionID As Boolean = False,
                                      Optional ByVal transactionID As String = "") As Object
 
             Dim fullActionUrl As String = getActionUrl(action, queryStringParameters)
@@ -244,11 +248,11 @@ Namespace NetvisorWSClient.communication
             Return response
         End Function
 
-        Private Function sendRequest_real(ByVal fullActionUrl As String, _
-                                        Optional ByVal postData As String = vbNullString, _
-                                        Optional ByVal targetOrganisation As FinnishOrganisationIdentifier = Nothing, _
-                                        Optional ByVal queryStringParameters As NameValueCollection = Nothing, _
-                                        Optional ByVal overrideTransactionID As Boolean = False, _
+        Private Function sendRequest_real(ByVal fullActionUrl As String,
+                                        Optional ByVal postData As String = vbNullString,
+                                        Optional ByVal targetOrganisation As FinnishOrganisationIdentifier = Nothing,
+                                        Optional ByVal queryStringParameters As NameValueCollection = Nothing,
+                                        Optional ByVal overrideTransactionID As Boolean = False,
                                         Optional ByVal transactionID As String = "") As Object
 
             Dim request As HttpWebRequest = CType(WebRequest.Create(fullActionUrl), HttpWebRequest)
@@ -269,7 +273,8 @@ Namespace NetvisorWSClient.communication
             Try
                 If Len(postData) > 0 Then
                     Dim sWriter As StreamWriter = New StreamWriter(request.GetRequestStream())
-                    sWriter.Write(postData)
+                    Dim bytes = Encoding.Default.GetBytes(postData)
+                    sWriter.Write(Encoding.UTF8.GetString(bytes))
                     sWriter.Close()
                 Else
                     request.ContentLength = 0

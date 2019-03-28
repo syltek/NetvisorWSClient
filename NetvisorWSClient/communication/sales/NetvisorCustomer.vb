@@ -35,6 +35,7 @@ Namespace NetvisorWSClient.communication.sales
         Private m_organisationIdentifier As String
         Private m_city As String
         Private m_streetAddress As String
+        Private m_additionalAddressLine As String
         Private m_postNumber As String
         Private m_countryISO3166Code As String
         Private m_phoneNumber As String
@@ -159,6 +160,19 @@ Namespace NetvisorWSClient.communication.sales
                     Throw New ApplicationException("Streetaddress too long")
                 Else
                     m_streetAddress = Value
+                End If
+            End Set
+        End Property
+
+        Public Property AdditionalAddressLine() As String
+            Get
+                Return m_additionalAddressLine
+            End Get
+            Set(ByVal Value As String)
+                If Len(Value) > 80 Then
+                    Throw New ApplicationException("AdditionalAddressLine too long")
+                Else
+                    m_additionalAddressLine = Value
                 End If
             End Set
         End Property
