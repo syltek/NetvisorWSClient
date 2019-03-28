@@ -51,6 +51,7 @@ Namespace NetvisorWSClient.communication.sales
                 .Name = customerDocument.SelectSingleNode(CUSTOMER_BASE_INFORMATION_PATH & "Name").InnerText
                 .NameExtension = customerDocument.SelectSingleNode(CUSTOMER_BASE_INFORMATION_PATH & "NameExtension").InnerText
                 .StreetAddress = customerDocument.SelectSingleNode(CUSTOMER_BASE_INFORMATION_PATH & "StreetAddress").InnerText
+                .AdditionalAddressLine = customerDocument.SelectSingleNode(CUSTOMER_BASE_INFORMATION_PATH & "AdditionAladdressLine").InnerText
                 .City = customerDocument.SelectSingleNode(CUSTOMER_BASE_INFORMATION_PATH & "City").InnerText
                 .PostNumber = customerDocument.SelectSingleNode(CUSTOMER_BASE_INFORMATION_PATH & "PostNumber").InnerText
 

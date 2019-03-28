@@ -51,6 +51,10 @@ Namespace NetvisorWSClient.communication.sales
                     .WriteElementString("StreetAddress", customer.StreetAddress)
                 End If
 
+                If Len(customer.AdditionalAddressLine) > 0 Then
+                    .WriteElementString("AdditionAladdressLine", customer.AdditionalAddressLine)
+                End If
+
                 If Len(customer.City) > 0 Then
                     .WriteElementString("City", customer.City)
                 End If
