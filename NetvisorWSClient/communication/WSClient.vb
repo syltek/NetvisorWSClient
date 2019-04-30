@@ -25,7 +25,7 @@ Namespace NetvisorWSClient.communication
         Public Const InterfaceId As String = "36613EE9-125F-493d-9968-771E18C2226F"
         Public Const EventsId As String = "A036F02F-F87E-4548-A536-7DD7EA8E62B2"
 
-        Public Const BASE_URL_PRODUCTION As String = "https://integration.netvisor.fi"
+        Public Const BASE_URL_PRODUCTION As String = "https://integration.netvisor.fi/"
         Public Const BASE_URL_DEMO As String = "https://isvapi.netvisor.fi/"
         Public Const BASE_URL_ISV As String = "https://isvapi.netvisor.fi/"
 
