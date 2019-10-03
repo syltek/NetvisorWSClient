@@ -9,6 +9,8 @@
 Namespace NetvisorWSClient.util
     Public Class Hash
 
+        Private Shared ReadOnly Latin1Encoding As Text.Encoding = Text.Encoding.GetEncoding("iso-8859-1")
+
         Private m_stringToEncode As String
 
         Private m_32CharHexString As String
@@ -37,7 +39,7 @@ Namespace NetvisorWSClient.util
 
         Private Sub compute(ByVal type As hashType)
 
-            Dim Ne As Text.Encoding = System.Text.Encoding.Default
+            Dim Ne As Text.Encoding = Latin1Encoding
             Dim SHA256 As New System.Security.Cryptography.SHA256CryptoServiceProvider()
             Dim bytes As Byte() = SHA256.ComputeHash(Ne.GetBytes(m_stringToEncode))
 
